@@ -7,13 +7,9 @@ import especialidadesRoutes from "./especialidades/especialidades.routes.js";
 
 const r = Router();
 
-// Solo logueados
 r.use(requireAuth);
-
-// Solo enfermería (si también quieres ADMIN/SUPERADMIN agrega aquí)
 r.use(requireRole("NURSE", "ADMIN", "SUPERADMIN"));
 
-// submódulos
 r.use("/medicos", medicosRoutes);
 r.use("/especialidades", especialidadesRoutes);
 

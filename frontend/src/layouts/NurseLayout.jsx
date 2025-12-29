@@ -1,6 +1,7 @@
 import React from "react";
+import { NavLink } from "react-router-dom";
 import { useAuth } from "../auth/AuthContext";
-import "../styles/admin.scss"; // reutilizamos el estilo del admin (sidebar)
+import "../styles/admin.scss";
 
 export default function NurseLayout({ title, children }) {
   const { logout } = useAuth();
@@ -11,8 +12,42 @@ export default function NurseLayout({ title, children }) {
         <div className="admin__brand">Enfermería</div>
 
         <nav className="admin__nav">
-          <a className="admin__link" href="/nurse">Inicio</a>
-          <a className="admin__link" href="/nurse/pacientes">Pacientes</a>
+          <NavLink
+            to="/nurse"
+            end
+            className={({ isActive }) =>
+              `admin__link ${isActive ? "admin__link--active" : ""}`
+            }
+          >
+            Inicio
+          </NavLink>
+
+          <NavLink
+            to="/nurse/pacientes"
+            className={({ isActive }) =>
+              `admin__link ${isActive ? "admin__link--active" : ""}`
+            }
+          >
+            Pacientes
+          </NavLink>
+
+          <NavLink
+            to="/nurse/especialidades"
+            className={({ isActive }) =>
+              `admin__link ${isActive ? "admin__link--active" : ""}`
+            }
+          >
+            Especialidades
+          </NavLink>
+
+          <NavLink
+            to="/nurse/medicos"
+            className={({ isActive }) =>
+              `admin__link ${isActive ? "admin__link--active" : ""}`
+            }
+          >
+            Médicos
+          </NavLink>
         </nav>
 
         <button className="btn btn--dark" onClick={logout}>

@@ -14,6 +14,11 @@ import NurseHome from "./pages/nurse/NurseHome";
 import PacientesRouter from "./pages/nurse/PacientesRouter";
 import NurseReportesPage from "./pages/nurse/NurseReportesPage"; // ejemplo (si es común)
 
+
+import NurseEspecialidadesPage from "./pages/nurse/NurseEspecialidadesPage";
+import NurseMedicosPage from "./pages/nurse/NurseMedicosPage";
+
+
 export default function App() {
   return (
     <Routes>
@@ -76,6 +81,32 @@ export default function App() {
         }
       />
 
+<Route
+  path="/nurse/especialidades"
+  element={
+    <RoleRoute allowedRoles={["NURSE"]}>
+      <NurseEspecialidadesPage />
+    </RoleRoute>
+  }
+/>
+
+<Route
+  path="/nurse/medicos"
+  element={
+    <RoleRoute allowedRoles={["NURSE"]}>
+      <NurseMedicosPage />
+    </RoleRoute>
+  }
+/>
+
+<Route
+  path="/nurse/pacientes/*"
+  element={
+    <RoleRoute allowedRoles={["NURSE"]}>
+      <PacientesRouter />
+    </RoleRoute>
+  }
+/>
       <Route path="/no-autorizado" element={<div style={{ padding: 20 }}>No autorizado</div>} />
       <Route path="*" element={<div style={{ padding: 20 }}>404</div>} />
     </Routes>

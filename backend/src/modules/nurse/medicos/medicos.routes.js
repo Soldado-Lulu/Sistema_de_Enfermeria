@@ -1,27 +1,24 @@
 import { Router } from "express";
 import * as Ctrl from "./medicos.controller.js";
+import { requireAuth } from "../../../middlewares/auth.js";
+import { requireRole } from "../../../middlewares/roles.js";
 
 const r = Router();
 
-/**
- * GET /api/nurse/medicos/con-especialidad?idestablecimiento=112
- */
-r.get("/con-especialidad", Ctrl.medicosConEspecialidad);
+// solo enfermería (y si quieres admin también, lo agregas)
+r.use(requireAuth);
+r.use(requireRole("NURSE", "ADMIN", "SUPERADMIN"));
 
-/**
- * GET /api/nurse/medicos/consultorios?idestablecimiento=112
- */
-r.get("/consultorios", Ctrl.medicosConsultorios);
+// GET /api/nurse/medicos/establecimiento/112
+r.get("/establecimiento/:idestablecimiento", Ctrl.getByEst);
 
-/**
- * GET /api/nurse/medicos/cuaderno/:idcuaderno?idestablecimiento=112
- */
-r.get("/cuaderno/:idcuaderno", Ctrl.medicosByCuaderno);
+// GET /api/nurse/medicos/establecimiento/112/consultorios
+r.get("/establecimiento/:idestablecimiento/consultorios", Ctrl.getConsultorios);
 
-/**
- * GET /api/nurse/medicos/especialidades-con-medicos?idestablecimiento=112
- * (útil para armar combos y agrupar)
- */
-r.get("/especialidades-con-medicos", Ctrl.especialidadesConMedicos);
+// GET /api/nurse/medicos/establecimiento/112/especialidades-con-medicos
+r.get("/establecimiento/:idestablecimiento/especialidades-con-medicos", Ctrl.getEspecialidadesConMedicos);
+
+// GET /api/nurse/medicos/establecimiento/112/cuaderno/123
+r.get("/establecimiento/:idestablecimiento/cuaderno/:idcuaderno", Ctrl.getByEstAndCuaderno);
 
 export default r;
