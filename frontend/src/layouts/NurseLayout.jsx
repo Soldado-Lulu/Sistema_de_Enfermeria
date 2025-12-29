@@ -12,6 +12,7 @@ export default function NurseLayout({ title, children }) {
 
         <nav className="admin__nav">
           <a className="admin__link" href="/nurse">Inicio</a>
+          <a className="admin__link" href="/nurse/pacientes">Pacientes</a>
         </nav>
 
         <button className="btn btn--dark" onClick={logout}>

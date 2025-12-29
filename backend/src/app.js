@@ -7,6 +7,7 @@ import authRoutes from "./modules/auth/auth.routes.js";
 import adminRoutes from "./modules/admin/admin.routes.js";
 import catalogRoutes from "./modules/catalog/catalog.routes.js";
 import rolesAdminRoutes from "./modules/admin/roles.routes.js";
+import nurseRoutes from "./modules/nurse/nurse.routes.js";
 
 import { errorHandler } from "./middlewares/error.js";
 
@@ -23,6 +24,7 @@ export function createApp() {
   app.use("/api/admin", adminRoutes);
   app.use("/api/catalog", catalogRoutes);
 app.use("/api/admin/roles", rolesAdminRoutes);
+app.use("/api/nurse", nurseRoutes);
 
   app.use(errorHandler);
   return app;
