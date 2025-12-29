@@ -1,0 +1,58 @@
+@use "./variables" as *;
+@use "./components";
+
+.admin {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  min-height: 100vh;
+
+  &__sidebar {
+    background: #0b1220;
+    color: white;
+    padding: 16px;
+    display: grid;
+    gap: 14px;
+    align-content: start;
+  }
+
+  &__brand {
+    font-weight: 800;
+    font-size: 16px;
+    letter-spacing: .2px;
+  }
+
+  &__nav {
+    display: grid;
+    gap: 8px;
+  }
+
+  &__link {
+    padding: 10px 12px;
+    border-radius: 12px;
+    background: rgba(255,255,255,.06);
+    &:hover { background: rgba(255,255,255,.10); }
+  }
+
+  &__main { padding: 18px; }
+  &__header {
+    background: $card;
+    border: 1px solid $border;
+    border-radius: $radius;
+    padding: 14px 16px;
+    box-shadow: $shadow;
+  }
+  &__content { margin-top: 14px; }
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  background: $card;
+  border: 1px solid $border;
+  border-radius: $radius;
+  overflow: hidden;
+  box-shadow: $shadow;
+
+  th, td { padding: 12px; border-top: 1px solid $border; text-align: left; }
+  thead th { background: #f1f5f9; border-top: none; font-size: 13px; color: $muted; }
+}
