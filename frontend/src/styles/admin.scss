@@ -46,13 +46,127 @@
 
 .table {
   width: 100%;
-  border-collapse: collapse;
   background: $card;
   border: 1px solid $border;
   border-radius: $radius;
   overflow: hidden;
   box-shadow: $shadow;
 
-  th, td { padding: 12px; border-top: 1px solid $border; text-align: left; }
-  thead th { background: #f1f5f9; border-top: none; font-size: 13px; color: $muted; }
+  /* ✅ clave: scroll horizontal */
+  overflow-x: auto;
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 860px; /* fuerza scroll si no cabe */
+  }
+
+  th, td {
+    padding: 12px;
+    border-top: 1px solid $border;
+    text-align: left;
+    vertical-align: middle;
+    white-space: nowrap; /* evita que se rompa feo */
+  }
+
+  thead th {
+    background: #f1f5f9;
+    border-top: none;
+    font-size: 13px;
+    color: $muted;
+  }
+}
+
+@media (max-width: 860px) {
+  .table table {
+    min-width: 720px;
+  }
+}
+
+
+/* ===== Toggle sidebar ===== */
+.admin {
+  transition: grid-template-columns 200ms ease;
+}
+
+.admin.sidebar-open {
+  grid-template-columns: 260px 1fr;
+}
+
+.admin.sidebar-closed {
+  grid-template-columns: 0px 1fr;
+}
+
+.admin.sidebar-closed .admin__sidebar {
+  width: 0;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+}
+
+.admin__sidebar {
+  transition: width 200ms ease, padding 200ms ease;
+}
+/* =========================
+   RESPONSIVE LAYOUT
+========================= */
+
+/* Permite que el main no se rompa y que tablas hagan scroll */
+.admin__main {
+  min-width: 0;
+}
+
+/* Sidebar + main en desktop ya lo tienes: 260px 1fr */
+
+@media (max-width: 1024px) {
+  .admin {
+    grid-template-columns: 220px 1fr;
+  }
+}
+
+@media (max-width: 860px) {
+  /* Pasamos a 1 columna: sidebar arriba */
+  .admin {
+    grid-template-columns: 1fr;
+  }
+
+  .admin__sidebar {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    border-bottom: 1px solid $border;
+    padding: 12px;
+  }
+
+  .admin__nav {
+    grid-auto-flow: column;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .admin__link {
+    text-align: center;
+    white-space: nowrap;
+    padding: 10px 8px;
+  }
+
+  .admin__main {
+    padding: 12px;
+  }
+
+  .admin__header {
+    padding: 12px;
+  }
+}
+
+/* Si tienes el toggle sidebar (sidebar-open/closed), en móvil lo ignoramos */
+@media (max-width: 860px) {
+  .admin.sidebar-closed {
+    grid-template-columns: 1fr;
+  }
+  .admin.sidebar-closed .admin__sidebar {
+    width: auto;
+    padding: 12px;
+    overflow: visible;
+  }
 }

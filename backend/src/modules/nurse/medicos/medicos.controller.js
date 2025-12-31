@@ -1,42 +1,17 @@
 import * as svc from "./medicos.service.js";
 
-export async function getByEst(req, res, next) {
+export async function getMedicosConEspecialidad(req, res, next) {
   try {
-    const idestablecimiento = Number(req.params.idestablecimiento);
-    const data = await svc.getMedicosConEspecialidadByEst(idestablecimiento);
-    res.json({ ok: true, data });
-  } catch (e) {
-    next(e);
-  }
-}
+    const idest = Number(req.query.idest ?? req.establishment?.idestablecimiento);
 
-export async function getByEstAndCuaderno(req, res, next) {
-  try {
-    const idestablecimiento = Number(req.params.idestablecimiento);
-    const idcuaderno = Number(req.params.idcuaderno);
-    const data = await svc.getMedicosByEstAndCuaderno(idestablecimiento, idcuaderno);
-    res.json({ ok: true, data });
-  } catch (e) {
-    next(e);
-  }
-}
+    if (!idest || Number.isNaN(idest)) {
+      return res.status(400).json({ ok: false, message: "Falta idest (establecimiento)" });
+    }
 
-export async function getConsultorios(req, res, next) {
-  try {
-    const idestablecimiento = Number(req.params.idestablecimiento);
-    const data = await svc.getMedicosConsultoriosByEst(idestablecimiento);
-    res.json({ ok: true, data });
+    const rows = await svc.getMedicosConEspecialidad(idest);
+    return res.json({ ok: true, data: rows });
   } catch (e) {
-    next(e);
-  }
-}
-
-export async function getEspecialidadesConMedicos(req, res, next) {
-  try {
-    const idestablecimiento = Number(req.params.idestablecimiento);
-    const data = await svc.getEspecialidadesConMedicosByEst(idestablecimiento);
-    res.json({ ok: true, data });
-  } catch (e) {
+    console.error("[getMedicosConEspecialidad] ERROR:", e);
     next(e);
   }
 }

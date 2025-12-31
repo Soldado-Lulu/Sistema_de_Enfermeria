@@ -47,8 +47,19 @@
   &--ok { background: #dcfce7; color: #166534; }
 }
 
-.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.grid2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+@media (max-width: 860px) {
+  .grid2 {
+    grid-template-columns: 1fr;
+  }
+}
 .grid1 { display: grid; gap: 12px; }
+.grid1 { display: grid; gap: 12px; }  
 .modal__backdrop {
   position: fixed;
   inset: 0;

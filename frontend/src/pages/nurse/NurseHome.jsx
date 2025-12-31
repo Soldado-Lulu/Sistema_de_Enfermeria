@@ -22,14 +22,10 @@ export default function NurseHome() {
           <Link className="btn btn--primary" to="/nurse/pacientes">
             Pacientes
           </Link>
-
-          <Link className="btn btn--dark" to="/nurse/especialidades">
-            Especialidades y médicos
-          </Link>
-
           <Link className="btn btn--dark" to="/nurse/medicos">
             Médicos
           </Link>
+
         </div>
       </div>
     </NurseLayout>

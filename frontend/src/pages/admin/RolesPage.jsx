@@ -1,3 +1,4 @@
+// frontend/src/pages/admin/PendingUsersPage.jsx
 import React, { useEffect, useState } from "react";
 import AdminLayout from "../../layouts/AdminLayout";
 import "../../styles/base.scss";

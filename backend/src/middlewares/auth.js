@@ -1,18 +1,19 @@
+// backend/src/middlewares/auth.js
 import { verifyToken } from "../utils/jwt.js";
 
-export function requireAuth(req, _res, next) {
+export function requireAuth(req, res, next) {
   try {
-    const header = req.headers.authorization || "";
-    const token = header.startsWith("Bearer ") ? header.slice(7) : null;
-    if (!token) {
-      const err = new Error("No autenticado");
-      err.statusCode = 401;
-      throw err;
+    const h = req.headers.authorization || "";
+    const [type, token] = h.split(" ");
+
+    if (type !== "Bearer" || !token) {
+      return res.status(401).json({ ok: false, error: "No autorizado" });
     }
-    req.user = verifyToken(token); // {id_user, fk_rol, fk_establecimiento}
+
+    const payload = verifyToken(token);
+    req.user = payload; 
     next();
   } catch (e) {
-    e.statusCode = e.statusCode || 401;
-    next(e);
+    return res.status(401).json({ ok: false, error: "Token inválido" });
   }
 }

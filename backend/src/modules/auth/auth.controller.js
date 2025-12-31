@@ -1,3 +1,4 @@
+// backend/src/modules/auth/auth.controller.js
 import { RegisterSchema, LoginSchema } from "./auth.schemas.js";
 import * as svc from "./auth.service.js";
 import * as authRepo from "./auth.repository.js";
@@ -21,7 +22,6 @@ export async function login(req, res, next) {
     next(e);
   }
 }
-
 export async function me(req, res, next) {
   try {
     const id_user = req.user?.id_user;
@@ -29,8 +29,22 @@ export async function me(req, res, next) {
       return res.status(401).json({ ok: false, error: "No autorizado" });
     }
 
+    // ✅ traer datos del usuario
     const user = await authRepo.getMeById(id_user);
-    return res.json({ ok: true, data: user });
+    if (!user) {
+      return res.status(404).json({ ok: false, error: "Usuario no encontrado" });
+    }
+
+    // ✅ traer establecimientos (tags)
+    const ests = await authRepo.getUserEstablishments(id_user);
+
+    return res.json({
+      ok: true,
+      data: {
+        ...user,
+        establecimientos: ests,
+      },
+    });
   } catch (e) {
     next(e);
   }

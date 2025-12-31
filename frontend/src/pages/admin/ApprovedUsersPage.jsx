@@ -12,12 +12,10 @@ export default function ApprovedUsersPage() {
   const [err, setErr] = useState(null);
   const [msg, setMsg] = useState(null);
 
-  // modal edición
   const [editing, setEditing] = useState(null);
 
-  // filtros
-  const [rol, setRol] = useState(""); // por nombre: "USER", "ADMIN"...
-  const [establecimiento, setEstablecimiento] = useState(""); // id
+  const [rol, setRol] = useState("");
+  const [establecimiento, setEstablecimiento] = useState("");
 
   const query = useMemo(() => {
     const params = new URLSearchParams();
@@ -55,14 +53,27 @@ export default function ApprovedUsersPage() {
     setEstablecimiento("");
   };
 
-  const onEdit = (u) => {
-    // guardamos usuario y campos útiles para el modal
-    setEditing({
-      ...u,
-      // por si no viene fk_* en tu endpoint, el modal igual funciona
-      fk_rol: u.fk_rol ?? null,
-      fk_establecimiento: u.fk_establecimiento ?? u.id_establecimiento ?? null,
-    });
+  // ✅ ahora al editar cargamos los establecimientos del usuario
+  const onEdit = async (u) => {
+    setErr(null);
+    try {
+      // backend debe tener este endpoint
+      const r = await http.get(`/api/admin/users/${u.id_user}/establecimientos`);
+      const rows = r.data.data || [];
+
+      const establecimientos = rows.map((x) => Number(x.id_establecimiento));
+      const default_establecimiento =
+        rows.find((x) => x.is_default)?.id_establecimiento || establecimientos[0] || null;
+
+      setEditing({
+        ...u,
+        fk_rol: u.fk_rol ?? null,
+        establecimientos,
+        default_establecimiento: default_establecimiento ? Number(default_establecimiento) : null,
+      });
+    } catch (e) {
+      setErr(e?.response?.data?.error || e?.response?.data?.message || "Error cargando establecimientos");
+    }
   };
 
   const onDisable = async (u) => {
@@ -86,13 +97,13 @@ export default function ApprovedUsersPage() {
     setErr(null);
 
     try {
-      // payload trae: nombre, apellido, telefono, fk_rol, fk_establecimiento
+      // payload trae: nombre, apellido, telefono, fk_rol, establecimientos[], default_establecimiento
       await http.patch(`/api/admin/users/${editing.id_user}`, payload);
       setEditing(null);
       setMsg("✅ Usuario actualizado");
       await loadUsers();
     } catch (e) {
-      setErr(e?.response?.data?.error || "Error actualizando usuario");
+      setErr(e?.response?.data?.error || e?.response?.data?.message || "Error actualizando usuario");
     }
   };
 
@@ -116,7 +127,7 @@ export default function ApprovedUsersPage() {
           </div>
 
           <div>
-            <label className="label">Filtrar por establecimiento</label>
+            <label className="label">Filtrar por establecimiento (activo)</label>
             <select
               className="input"
               value={establecimiento}
@@ -150,7 +161,7 @@ export default function ApprovedUsersPage() {
               <th>Nombre</th>
               <th>Correo</th>
               <th>Rol</th>
-              <th>Establecimiento</th>
+              <th>Establecimiento activo</th>
               <th>Teléfono</th>
               <th>Creado</th>
               <th>Acciones</th>
@@ -169,7 +180,6 @@ export default function ApprovedUsersPage() {
                 <td>{u.nombre_establecimiento || "-"}</td>
                 <td>{u.telefono || "-"}</td>
                 <td>{u.created_at ? new Date(u.created_at).toLocaleString() : "-"}</td>
-
                 <td>
                   <div style={{ display: "flex", gap: 8 }}>
                     <button className="btn btn--dark" onClick={() => onEdit(u)}>
@@ -194,7 +204,6 @@ export default function ApprovedUsersPage() {
         </table>
       </div>
 
-      {/* Modal editar */}
       <EditUserModal
         open={!!editing}
         user={editing}

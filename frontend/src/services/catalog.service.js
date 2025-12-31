@@ -1,3 +1,4 @@
+// frontend/src/services/catalog.service.js
 import { http } from "../api/http";
 
 export const catalogService = {

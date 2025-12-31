@@ -19,8 +19,8 @@ export default function LoginPage() {
 
     try {
       const me = await login({ correo, password });
- console.log("👤 Usuario (me):", me);
-      // ✅ redirección por rol
+      console.log("👤 Usuario (me):", me);
+
       if (me?.rol === "ADMIN" || me?.rol === "SUPERADMIN") {
         nav("/admin/pending", { replace: true });
         return;
@@ -31,7 +31,6 @@ export default function LoginPage() {
         return;
       }
 
-      // cualquier otro rol
       nav("/no-autorizado", { replace: true });
     } catch (e) {
       setErr(e?.response?.data?.error || "Error al iniciar sesión");
@@ -41,11 +40,7 @@ export default function LoginPage() {
   return (
     <AuthLayout
       title="Iniciar sesión"
-      footer={
-        <span>
-          ¿No tienes cuenta? <Link to="/register">Registrarse</Link>
-        </span>
-      }
+      footer={<span>¿No tienes cuenta? <Link to="/register">Registrarse</Link></span>}
     >
       <form className="grid1" onSubmit={onSubmit}>
         <div>
@@ -70,10 +65,7 @@ export default function LoginPage() {
         </div>
 
         {err && <div className="alert alert--error">{err}</div>}
-
-        <button className="btn btn--primary" type="submit">
-          Entrar
-        </button>
+        <button className="btn btn--primary" type="submit">Entrar</button>
       </form>
     </AuthLayout>
   );
